@@ -1,0 +1,23 @@
+{
+  "name": "frontpanelserver",
+  "version": "1.0.0",
+  "description": "\"Manager service task company front panel\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "api",
+    "email"
+  ],
+  "author": "@sebDev0421",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.27",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.4.11",
+    "socket.io": "^2.3.0"
+  }
+}
