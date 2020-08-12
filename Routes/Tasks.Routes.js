@@ -30,10 +30,71 @@ app.put('/register',async(req,res)=>{
     await user.save()
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
-        console.log(obj)
     })
     
     console.log(resObj)
+    if(resObj === null){
+        res.json({status:104})
+    }
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        auth: {
+            user:'frontpanelappmanager@gmail.com',
+            pass:'jose042199'
+        }
+    });
+    
+    let mailOptions = {
+        from: 'frontpanelappmanager@gmail.com',
+        to: 'juanse0421@gmail.com',
+        subject: name+' esta pidiendo autorizacion para acceder a front panel app',
+        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
+    }
+    transporter.sendMail(mailOptions,function(err,data){
+        if(err){
+            console.log(err);
+        }else{
+            console.log('Email send!!')
+        }
+    })
+    res.json({status:200})
+})
+
+app.put('/getAuth',async(req,res)=>{
+    const {email} = req.body
+    var resObj    
+    await User.findOne({email:email},(err,obj)=>{
+        resObj = obj
+    })
+    if(resObj === null){
+        return res.json({status:100})   
+    }
+    
+    console.log(resObj)
+    
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        auth: {
+            user:'frontpanelappmanager@gmail.com',
+            pass:'jose042199'
+        }
+    });
+    
+    let mailOptions = {
+        from: 'frontpanelappmanager@gmail.com',
+        to: 'juanse0421@gmail.com',
+        subject: name+' esta pidiendo autorizacion para acceder a front panel app',
+        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
+    }
+    transporter.sendMail(mailOptions,function(err,data){
+        if(err){
+            console.log(err);
+        }else{
+            console.log('Email send!!')
+        }
+    })
     res.json({status:200})
 })
 
