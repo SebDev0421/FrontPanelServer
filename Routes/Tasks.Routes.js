@@ -28,7 +28,6 @@ app.put('/register',async(req,res)=>{
 
     const user = new User({name, lastName ,roll, email, password})
     await user.save()
-    var resObj    
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
     })
@@ -55,7 +54,7 @@ app.put('/register',async(req,res)=>{
             console.log('Email send!!')
         }
     }) */
-
+    console.log(resObj)
     res.json({status:200})
 })
 
