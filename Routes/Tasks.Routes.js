@@ -31,34 +31,35 @@ app.put('/register',async(req,res)=>{
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
         console.log('in obj',obj)
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            auth: {
+                user:'frontpanelappmanager@gmail.com',
+                pass:'jose042199'
+            }
+        });
+        
+        let mailOptions = {
+            from: 'frontpanelappmanager@gmail.com',
+            to: 'juanse0421@gmail.com',
+            subject: name+' esta pidiendo autorizacion para acceder a front panel app',
+            text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+obj._id
+        }
+        transporter.sendMail(mailOptions,function(err,data){
+            if(err){
+                console.log(err);
+            }else{
+                console.log('Email send!!')
+            }
+        })
     })
     
     if(resObj === null){
         return res.json({status:104})
     }
 
-    let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        auth: {
-            user:'frontpanelappmanager@gmail.com',
-            pass:'jose042199'
-        }
-    });
     
-    let mailOptions = {
-        from: 'frontpanelappmanager@gmail.com',
-        to: 'juanse0421@gmail.com',
-        subject: name+' esta pidiendo autorizacion para acceder a front panel app',
-        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
-    }
-    transporter.sendMail(mailOptions,function(err,data){
-        if(err){
-            console.log(err);
-        }else{
-            console.log('Email send!!')
-        }
-    })
     res.json({status:200})
 })
 
