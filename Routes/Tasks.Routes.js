@@ -11,6 +11,7 @@ const express = require('express'),
 const nodemailer = require('nodemailer');
 
 
+
 app.get('/',(req,res)=>{
     res.json({response:'hola'})
 })
@@ -31,28 +32,7 @@ app.put('/register',async(req,res)=>{
         resObj = obj
         console.log(obj)
     })
-    let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        auth: {
-            user:'frontpanelappmanager@gmail.com',
-            pass:'jose042199'
-        }
-    });
     
-    let mailOptions = {
-        from: 'frontpanelappmanager@gmail.com',
-        to: 'juanse0421@gmail.com',
-        subject: name+' esta pidiendo autorizacion para acceder a front panel app',
-        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
-    }
-    transporter.sendMail(mailOptions,function(err,data){
-        if(err){
-            console.log(err);
-        }else{
-            console.log('Email send!!')
-        }
-    })
     console.log(resObj)
     res.json({status:200})
 })
