@@ -32,15 +32,16 @@ app.put('/register',async(req,res)=>{
         console.log(obj)
     })
     let transporter = nodemailer.createTransport({
-        service:'gmail',
+        host: "smtp.mailtrap.io",
+        port: 2525,
         auth: {
-            user:'juanse0421@gmail.com',
-            pass:'pia042199'
+            user:'5c6c5a68f934da',
+            pass:'177cf37f8420ab'
         }
     });
     
     let mailOptions = {
-        from: 'juanse0421@gmail.com',
+        from: 'frontpanelappmanager@gmail.com',
         to: 'juanse0421@gmail.com',
         subject: name+' esta pidiendo autorizacion para acceder a front panel app',
         text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+'123456'
