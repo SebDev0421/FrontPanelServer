@@ -30,12 +30,13 @@ app.put('/register',async(req,res)=>{
     await user.save()
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
+        console.log('in obj',obj)
     })
     
-    console.log(resObj)
     if(resObj === null){
-        res.json({status:104})
+        return res.json({status:104})
     }
+
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
@@ -71,7 +72,6 @@ app.put('/getAuth',async(req,res)=>{
         return res.json({status:100})   
     }
     
-    console.log(resObj)
     
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
