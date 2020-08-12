@@ -55,10 +55,6 @@ app.put('/register',async(req,res)=>{
         })
     })
     
-    if(resObj === null){
-        return res.json({status:104})
-    }
-
     
     res.json({status:200})
 })
