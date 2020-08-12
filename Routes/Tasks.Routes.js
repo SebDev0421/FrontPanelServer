@@ -44,7 +44,7 @@ app.put('/register',async(req,res)=>{
         from: 'juanse0421@gmail.com',
         to: 'juanse0421@gmail.com',
         subject: name+' esta pidiendo autorizacion para acceder a front panel app',
-        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://181.54.182.7:8080/'+resObj._id
+        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
     }
     transporter.sendMail(mailOptions,function(err,data){
         if(err){
