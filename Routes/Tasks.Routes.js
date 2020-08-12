@@ -47,7 +47,7 @@ app.put('/register',async(req,res)=>{
     }
     transporter.sendMail(mailOptions,function(err,data){
         if(err){
-            console.log('error send email');
+            console.log(err);
         }else{
             console.log('Email send!!')
         }
