@@ -24,14 +24,14 @@ app.put('/register',async(req,res)=>{
     if(resObj !== null){
         return res.json({status:100})   
     }
-    console.log(resObj)
-
+    var resObj
     const user = new User({name, lastName ,roll, email, password})
     await user.save()
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
+        console.log(obj)
     })
-    /* let transporter = nodemailer.createTransport({
+    let transporter = nodemailer.createTransport({
         service:'smtp.gmail.com',
         port: 465,
         secure: true,
@@ -53,7 +53,7 @@ app.put('/register',async(req,res)=>{
         }else{
             console.log('Email send!!')
         }
-    }) */
+    })
     console.log(resObj)
     res.json({status:200})
 })
