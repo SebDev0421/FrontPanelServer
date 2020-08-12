@@ -32,11 +32,11 @@ app.put('/register',async(req,res)=>{
         console.log(obj)
     })
     let transporter = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
+        host: "smtp.gmail.com",
+        port: 465,
         auth: {
-            user:'5c6c5a68f934da',
-            pass:'177cf37f8420ab'
+            user:'frontpanelappmanager@gmail.com',
+            pass:'jose042199'
         }
     });
     
