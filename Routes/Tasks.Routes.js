@@ -32,7 +32,7 @@ app.put('/register',async(req,res)=>{
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
     })
-    let transporter = nodemailer.createTransport({
+    /* let transporter = nodemailer.createTransport({
         service:'smtp.gmail.com',
         port: 465,
         secure: true,
@@ -46,7 +46,7 @@ app.put('/register',async(req,res)=>{
         from: 'juanse0421@gmail.com',
         to: 'juanse0421@gmail.com',
         subject: name+' esta pidiendo autorizacion para acceder a front panel app',
-        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
+        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+'123456'
     }
     transporter.sendMail(mailOptions,function(err,data){
         if(err){
@@ -54,7 +54,7 @@ app.put('/register',async(req,res)=>{
         }else{
             console.log('Email send!!')
         }
-    })
+    }) */
 
     res.json({status:200})
 })
