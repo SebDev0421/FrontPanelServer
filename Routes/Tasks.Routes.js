@@ -32,9 +32,7 @@ app.put('/register',async(req,res)=>{
         console.log(obj)
     })
     let transporter = nodemailer.createTransport({
-        service:'smtp.gmail.com',
-        port: 465,
-        secure: true,
+        service:'gmail',
         auth: {
             user:'juanse0421@gmail.com',
             pass:'pia042199'
