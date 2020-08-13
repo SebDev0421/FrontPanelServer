@@ -4,16 +4,16 @@ const User = require('../Models/Users');
 const Tasks = require('../Models/Tasks');
 const History = require('../Models/History');
 
+const URIServer = '138.68.81.244' //181.54.182.7
 
 const express = require('express'),
       app = express.Router()
-
 const nodemailer = require('nodemailer');
 
 
 
 app.get('/',(req,res)=>{
-    res.json({response:'hola'})
+    res.json({response:'frontpanelapp'})
 })
 
 app.put('/register',async(req,res)=>{
@@ -44,7 +44,7 @@ app.put('/register',async(req,res)=>{
             from: 'frontpanelappmanager@gmail.com',
             to: 'juanse0421@gmail.com',
             subject: name+' esta pidiendo autorizacion para acceder a front panel app',
-            text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+obj._id
+            text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://'+URIServer+':8080/accessFrontpanelApp/'+obj._id
         }
         transporter.sendMail(mailOptions,function(err,data){
             if(err){
@@ -54,7 +54,6 @@ app.put('/register',async(req,res)=>{
             }
         })
     })
-    
     
     res.json({status:200})
 })
@@ -83,14 +82,60 @@ app.put('/getAuth',async(req,res)=>{
         from: 'frontpanelappmanager@gmail.com',
         to: 'juanse0421@gmail.com',
         subject: name+' esta pidiendo autorizacion para acceder a front panel app',
-        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://138.68.81.244:8080/'+resObj._id
+        text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://'+URIServer+':8080/accessFrontpanelApp/'+resObj._id
     }
     transporter.sendMail(mailOptions,function(err,data){
         if(err){
             console.log(err);
         }else{
-            console.log('Email send!!')
+           return res.json({status:200})
         }
+    })
+    
+})
+
+app.put('/sendrecoveryPass',async(req,res)=>{
+    const {email} = req.body
+    var resObj    
+    await User.findOne({email:email},(err,obj)=>{
+        resObj = obj
+        if(obj !== null){
+        try{
+            let transporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 465,
+                auth: {
+                    user:'frontpanelappmanager@gmail.com',
+                    pass:'jose042199'
+                }
+            });
+            
+            let mailOptions = {
+                from: 'frontpanelappmanager@gmail.com',
+                to: email,
+                subject: 'Recupera tu contraseña de frontPanelApp',
+                text: obj.name+' Puedes cambiar tu contraseña en este link'+'\nhttp://'+URIServer+':8080/recoveryPassword/'+resObj._id
+            }
+            transporter.sendMail(mailOptions,function(err,data){
+                if(err){
+                    console.log(err);
+                }
+            })
+        }catch(e){
+            if(e) throw e
+        }
+    }
+    })
+    if(resObj === null){
+        return res.json({status:100})   
+    }
+    res.json({status:200})
+})
+
+app.put('/recoveryPass',async(req,res)=>{
+    const {_id,password} = req.body
+    await User.findByIdAndUpdate(_id,{password:password},(err,obj)=>{
+        if(err) throw err
     })
     res.json({status:200})
 })
@@ -158,7 +203,6 @@ app.put('/changeData',async(req,res)=>{
     await User.findByIdAndUpdate(_id,{name:name,lastName:lastName,email:email,phone:phone,idEmployed:idEmployed},(err,obj)=>{
         resObj = obj
     })
-    console.log(resObj)
     if(resObj === null){
         return res.json({status:95})// user don't exist        
     } 
@@ -171,7 +215,6 @@ app.put('/deleteData',async(req,res)=>{
     await User.findByIdAndRemove(_id,(err,obj)=>{
         resObj = obj
     })
-    console.log(resObj)
     if(resObj === null){
         return res.json({status:95})// user don't exist        
     } 
@@ -203,7 +246,7 @@ app.put('/deleteTasks', async(req,res)=>{
     const {numOrder} = req.body
     console.log(numOrder)
     Tasks.findOneAndDelete({numOrder:numOrder},(err,obj)=>{
-        console.log(obj)
+        if(err) throw err
     })
     res.json('ok')
 })
@@ -238,10 +281,8 @@ app.put('/getNewTasks',async(req,res)=>{
     let resObj
     await Tasks.findById(_id,(err,obj)=>{
         resObj = obj
-        console.log(obj)
     })
     if (resObj !== null){
-        console.log(resObj.process)
         return res.json({status:resObj.process}) //  process upload
     }
     res.json({status:73}) //task don't exist

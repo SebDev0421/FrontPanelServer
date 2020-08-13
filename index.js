@@ -4,7 +4,6 @@ const { mongo } = require('mongoose')
 
 //packages
 const express = require('express'),
-      morgan = require('morgan'),
       app = express(),
       server = require('http').createServer(app),
       port = (process.env.PORT || 3000),
@@ -18,7 +17,7 @@ app.set('port',port)
 
 //middlewares
 
-app.use(morgan('dev'))
+
 app.use(express.urlencoded({extended:false}))
 
 app.use((req, res, next) => {
