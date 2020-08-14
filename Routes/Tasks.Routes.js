@@ -3,6 +3,7 @@
 const User = require('../Models/Users');
 const Tasks = require('../Models/Tasks');
 const History = require('../Models/History');
+const Notifications = require('../Models/Notifications');
 
 const URIServer = '138.68.81.244' //181.54.182.7
 
@@ -30,7 +31,6 @@ app.put('/register',async(req,res)=>{
     await user.save()
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
-        console.log('in obj',obj)
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -244,7 +244,6 @@ app.put('/readTasks', async(req,res)=>{
 
 app.put('/deleteTasks', async(req,res)=>{
     const {numOrder} = req.body
-    console.log(numOrder)
     Tasks.findOneAndDelete({numOrder:numOrder},(err,obj)=>{
         if(err) throw err
     })
@@ -295,7 +294,6 @@ app.put('/getHistory',async(req, res)=>{
 
 app.put('/stateChange',async(req,res)=>{
     const {_id} = req.body
-    console.log(_id)
     let resObj
     await Tasks.findByIdAndRemove(_id,(err,obj)=>{
         resObj = obj
@@ -308,6 +306,7 @@ app.put('/stateChange',async(req,res)=>{
 
 app.put('/deleteTaskHistory',async(req,res)=>{
     const {_id} = req.body
+    //status list 1: create, 2: modify , 3: delete, 4: Complete
     let resObj
     await History.findByIdAndDelete(_id,(err,obj)=>{
         if(err) throw err
@@ -318,5 +317,19 @@ app.put('/deleteTaskHistory',async(req,res)=>{
     }
     res.json({status:37}) // obj delete 
 })
+
+app.put('/NotificationsRead',async(req,res)=>{
+    res.json(await Notifications.find()) // obj read
+})
+
+app.put('/NotificationsWrite',async(req,res)=>{
+    const {numOrder,status} = req.body
+    const notifications = new Notifications({numOrder,status})
+    await notifications.save()
+    res.json({status:200}) // obj write
+})
+
+
+
 
 module.exports = app

@@ -10,7 +10,8 @@ const mongoose = require('mongoose'),
           password:"String",
           phone:"String",
           idEmployed:"String",
-          auth:"String"
+          auth:"String",
+          NotifiReg : "String"
       },{
           collection:"users"
       }),
