@@ -8,15 +8,15 @@ const express = require('express'),
       server = require('http').createServer(app),
       port = (process.env.PORT || 3000),
       mongoose = require('./Database'),
-      Routes = require('./Routes/Tasks.Routes')
-
+      Routes = require('./Routes/Tasks.Routes'),
+      fs = require('fs'),
+      https = require('https')
 
 
 //Settings
 app.set('port',port)
 
 //middlewares
-
 
 app.use(express.urlencoded({extended:false}))
 
@@ -33,8 +33,11 @@ app.use(express.json())
 app.use('/frontPanelApp/API/SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',Routes)
 
 
+https.createServer({
+  key: fs.readFileSync('selfsigned.key'),
+  cert: fs.readFileSync('selfsigned.crt')
+}, app).listen(PORT, function(){
+  console.log("My https server listening on port " + PORT + "...");
+});
 
-app.listen(app.get('port'),()=>{
-    console.log('[STARTING] server Frot panel in port: ',app.get('port'))
-})
 
