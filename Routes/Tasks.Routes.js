@@ -146,7 +146,7 @@ app.put('/login',async(req,res)=>{
     await User.findOne({email:email},(err,obj)=>{
         resObj = obj
     })
-    console.log(resObj)
+    //console.log(resObj)
     if(resObj !== null){
         return res.json({status:resObj}) //user exist and send informartion
     }
@@ -160,11 +160,65 @@ app.put('/access',async(req,res)=>{
     let resObj
     await User.findByIdAndUpdate(_id,{auth:"1"},(err,obj)=>{
         resObj = obj
+        try{
+            let transporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 465,
+                auth: {
+                    user:'frontpanelappmanager@gmail.com',
+                    pass:'jose042199'
+                }
+            });
+            
+            let mailOptions = {
+                from: 'frontpanelappmanager@gmail.com',
+                to: obj.email,
+                subject: 'Has sido aceptado en frontPanelApp',
+                text: obj.name+' Ya puedes acceder a la app de front panel'
+            }
+            transporter.sendMail(mailOptions,function(err,data){
+                if(err){
+                    console.log(err);
+                }
+            })
+        }catch(e){
+            if(e) throw e
+        }
     })
     if(resObj === null){
         return res.json({status:95})// user don't exist        
     }
     res.json({status:98}); //user auth access OK
+})
+
+app.put('/adviceSend',async(req,res)=>{
+    const {advice} = req.body
+    try{
+            let transporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 465,
+                auth: {
+                    user:'frontpanelappmanager@gmail.com',
+                    pass:'jose042199'
+                }
+            });
+            
+            let mailOptions = {
+                from: 'frontpanelappmanager@gmail.com',
+                to: 'juanse0421@gmail.com',
+                subject: 'Sugerencia',
+                text: advice
+            }
+            transporter.sendMail(mailOptions,function(err,data){
+                if(err){
+                    console.log(err);
+                }
+            })
+        }catch(e){
+            if(e) throw e
+        }
+    
+    res.json({status:200}); //user auth access OK
 })
 
 app.put('/getUsersData',async(req,res)=>{
@@ -282,7 +336,7 @@ app.put('/getNewTasks',async(req,res)=>{
         resObj = obj
     })
     if (resObj !== null){
-        return res.json({status:resObj.process}) //  process upload
+        return res.json({status:resObj.process,concpet:resObj.concept,observations:resObj.observations}) //  process upload
     }
     res.json({status:73}) //task don't exist
 })
