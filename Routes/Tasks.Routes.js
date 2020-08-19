@@ -336,11 +336,22 @@ app.put('/getNewTasks',async(req,res)=>{
         resObj = obj
     })
     if (resObj !== null){
-        return res.json({status:resObj.process,concpet:resObj.concept,observations:resObj.observations}) //  process upload
+        return res.json({status:resObj.process,concpet:resObj.concept,observations:resObj.observations,date:resObj.finishDate}) //  process upload
     }
     res.json({status:73}) //task don't exist
 })
 
+app.put('/getdataTasks',async(req,res)=>{
+    const {_id} = req.body
+    let resObj
+    await Tasks.findById(_id,(err,obj)=>{
+        resObj = obj
+    })
+    if (resObj !== null){
+        return res.json(resObj) //  process upload
+    }
+    res.json({status:73}) //task don't exist
+})
 
 app.put('/getHistory',async(req, res)=>{
     res.json(await History.find())
