@@ -28,11 +28,17 @@ async function writeTokens(){
     const TokensGetting= await Tokens.find()
         TokensUsers = []
         TokensGetting.map((value)=>{
-           TokensUsers.push(value.TokenDevice)
+            if(value.TokenDevice !== null){
+              TokensUsers.push(value.TokenDevice)
+            }
     })
 }
 
 writeTokens()
+
+
+
+
 
 app.get('/',(req,res)=>{
     res.json({response:'frontpanelapp'})
@@ -276,7 +282,6 @@ app.put('/addToken',async(req,res)=>{
     
     const {_id, TokenDevice} = req.body
     var resObj
-    console.log(TokensUsers)
     const tokens = new Tokens({TokenDevice})
 
     await Tokens.findOne({TokenDevice:TokenDevice},(err,obj)=>{
@@ -287,11 +292,37 @@ app.put('/addToken',async(req,res)=>{
         const TokensGetting= await Tokens.find()
         TokensUsers = []
         TokensGetting.map((value)=>{
-           TokensUsers.push(value.TokenDevice)
+           if(value.TokenDevice !== null){
+            TokensUsers.push(value.TokenDevice)
+           }
         })
         return res.json({status:200})
     } 
     res.json({status:400})
+      
+    
+})
+
+app.put('/deleteToken',async(req,res)=>{
+    
+    const {TokenId} = req.body
+    var resObj
+    await Tokens.findOneAndDelete({TokenDevice:TokenId},(err,obj)=>{
+        resObj = obj
+    })
+    if(resObj === null){
+        
+        return res.json({status:400})
+    }
+
+    const TokensGetting= await Tokens.find()
+        TokensUsers = []
+        TokensGetting.map((value)=>{
+           if(value.TokenDevice !== null){
+            TokensUsers.push(value.TokenDevice)
+           }
+        })
+    res.json({status:200})
       
     
 })
