@@ -4,6 +4,10 @@ const User = require('../Models/Users');
 const Tasks = require('../Models/Tasks');
 const History = require('../Models/History');
 const Notifications = require('../Models/Notifications');
+const Tokens = require('../Models/Tokens');
+const fcm = require('fcm-notification');
+const FCM = new fcm('./frontpanelnotificatons-firebase-adminsdk-2k5zf-dfdccd5abf.json');
+var TokensUsers = [];
 
 const URIServer = '138.68.81.244' //181.54.182.7
 
@@ -11,7 +15,24 @@ const express = require('express'),
       app = express.Router()
 const nodemailer = require('nodemailer');
 
+var message =(title,body)=> {
+    return {
+    notification:{
+      title : title,
+      body : body
+    }}
+  };
+  
 
+async function writeTokens(){
+    const TokensGetting= await Tokens.find()
+        TokensUsers = []
+        TokensGetting.map((value)=>{
+           TokensUsers.push(value.TokenDevice)
+    })
+}
+
+writeTokens()
 
 app.get('/',(req,res)=>{
     res.json({response:'frontpanelapp'})
@@ -251,6 +272,30 @@ app.put('/consult',async(req,res)=>{
     res.json({status:resObj}); //user auth access OK
 })
 
+app.put('/addToken',async(req,res)=>{
+    
+    const {_id, TokenDevice} = req.body
+    var resObj
+    console.log(TokensUsers)
+    const tokens = new Tokens({TokenDevice})
+
+    await Tokens.findOne({TokenDevice:TokenDevice},(err,obj)=>{
+        resObj = obj
+    })
+    if(resObj === null){
+        await tokens.save()
+        const TokensGetting= await Tokens.find()
+        TokensUsers = []
+        TokensGetting.map((value)=>{
+           TokensUsers.push(value.TokenDevice)
+        })
+        return res.json({status:200})
+    } 
+    res.json({status:400})
+      
+    
+})
+
 app.put('/changeData',async(req,res)=>{
     const {_id,name,lastName,email,phone,idEmployed} = req.body
     let resObj
@@ -259,7 +304,8 @@ app.put('/changeData',async(req,res)=>{
     })
     if(resObj === null){
         return res.json({status:95})// user don't exist        
-    } 
+    }
+    
     res.json({status:resObj}); //user Change data
 })
 
@@ -285,6 +331,10 @@ app.put('/addNewTask',async(req,res)=>{
     if (resObj === null){
         const tasks = new Tasks({payer,numOrder,concept,uds,process,finishDate,observations,createdId})
         await tasks.save()
+        FCM.sendToMultipleToken(message('Orden Creada','La orden' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
+            if(err) throw err
+         
+        })
         return res.json({status:78}) //  task was saved
     }
     /*  */
@@ -311,9 +361,13 @@ app.put('/editTask',async(req,res)=>{
         resObj = obj
     })
     if (resObj !== null){
+        FCM.sendToMultipleToken(message('Orden Editada','La orden' + numOrder + ' ha sido editada'), TokensUsers, function(err, response) {
+            if(err)throw err
+        })
         return res.json({status:71}) //  task was edited
+        
     }
-    
+        
     res.json({status:73}) //task don't exist
 })
 
@@ -384,13 +438,18 @@ app.put('/deleteTaskHistory',async(req,res)=>{
 })
 
 app.put('/NotificationsRead',async(req,res)=>{
-    res.json(await Notifications.find()) // obj read
+    res.json(await Notifications.find().sort({_id:-1}).limit(10)) // obj read
 })
 
 app.put('/NotificationsWrite',async(req,res)=>{
     const {numOrder,status} = req.body
     const notifications = new Notifications({numOrder,status})
     await notifications.save()
+    if(status === 4){
+    FCM.sendToMultipleToken(message('Orden Completada','La orden' + numOrder + ' ha sido completada'), TokensUsers, function(err, response) {
+        if(err)throw err
+    })
+    }
     res.json({status:200}) // obj write
 })
 

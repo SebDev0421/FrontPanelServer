@@ -11,7 +11,7 @@ const mongoose = require('mongoose'),
           phone:"String",
           idEmployed:"String",
           auth:"String",
-          NotifiReg : "String"
+          tokenId : "String"
       },{
           collection:"users"
       }),
