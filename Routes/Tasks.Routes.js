@@ -69,7 +69,7 @@ app.put('/register',async(req,res)=>{
         
         let mailOptions = {
             from: 'frontpanelappmanager@gmail.com',
-            to: 'juanse0421@gmail.com',
+            to: 'newappordercontrol@gmail.com',
             subject: name+' esta pidiendo autorizacion para acceder a front panel app',
             text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://'+URIServer+':8080/accessFrontpanelApp/'+obj._id
         }
@@ -107,7 +107,7 @@ app.put('/getAuth',async(req,res)=>{
     
     let mailOptions = {
         from: 'frontpanelappmanager@gmail.com',
-        to: 'juanse0421@gmail.com',
+        to: 'newappordercontrol@gmail.com',
         subject: name+' esta pidiendo autorizacion para acceder a front panel app',
         text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://'+URIServer+':8080/accessFrontpanelApp/'+resObj._id
     }
@@ -232,7 +232,7 @@ app.put('/adviceSend',async(req,res)=>{
             
             let mailOptions = {
                 from: 'frontpanelappmanager@gmail.com',
-                to: 'juanse0421@gmail.com',
+                to: 'newappordercontrol@gmail.com',
                 subject: 'Sugerencia',
                 text: advice
             }
@@ -439,7 +439,10 @@ app.put('/getdataTasks',async(req,res)=>{
 })
 
 app.put('/getHistory',async(req, res)=>{
-    res.json(await History.find())
+    const {lenght} = req.body;
+    const data = await History.find().sort({_id:-1}).limit(lenght);
+    const len = await (await History.find()).length;
+    res.json({status:data,len:len})
 })
 
 app.put('/stateChange',async(req,res)=>{
@@ -469,6 +472,7 @@ app.put('/deleteTaskHistory',async(req,res)=>{
 })
 
 app.put('/NotificationsRead',async(req,res)=>{
+    
     res.json(await Notifications.find().sort({_id:-1}).limit(10)) // obj read
 })
 
