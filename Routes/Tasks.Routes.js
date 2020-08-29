@@ -353,16 +353,16 @@ app.put('/deleteData',async(req,res)=>{
 })
 
 app.put('/addNewTask',async(req,res)=>{
-    const {payer,numOrder,concept,uds,process,finishDate,observations,createdId} = req.body
+    const {payer,numOrder,concept,uds,process,finishDate,observations,createdId,createDate} = req.body
     let resObj
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
     })
 
     if (resObj === null){
-        const tasks = new Tasks({payer,numOrder,concept,uds,process,finishDate,observations,createdId})
+        const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
         await tasks.save()
-        FCM.sendToMultipleToken(message('Orden Creada','La orden' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
+        FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
             if(err) throw err
          
         })
@@ -392,7 +392,7 @@ app.put('/editTask',async(req,res)=>{
         resObj = obj
     })
     if (resObj !== null){
-        FCM.sendToMultipleToken(message('Orden Editada','La orden' + numOrder + ' ha sido editada'), TokensUsers, function(err, response) {
+        FCM.sendToMultipleToken(message('Orden Editada','La orden ' + numOrder + ' ha sido editada'), TokensUsers, function(err, response) {
             if(err)throw err
         })
         return res.json({status:71}) //  task was edited
@@ -451,8 +451,8 @@ app.put('/stateChange',async(req,res)=>{
     await Tasks.findByIdAndRemove(_id,(err,obj)=>{
         resObj = obj
     })
-    const {payer,numOrder,concept,uds,process,finishDate,observations,createdId} = resObj
-    const history = new History({payer,numOrder,concept,uds,process,finishDate,observations,createdId})
+    const {payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId} = resObj
+    const history = new History({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
     await history.save()
     res.json({status:38}) // pass satatus task to history
 })
@@ -481,7 +481,7 @@ app.put('/NotificationsWrite',async(req,res)=>{
     const notifications = new Notifications({numOrder,status})
     await notifications.save()
     if(status === 4){
-    FCM.sendToMultipleToken(message('Orden Completada','La orden' + numOrder + ' ha sido completada'), TokensUsers, function(err, response) {
+    FCM.sendToMultipleToken(message('Orden Completada','La orden ' + numOrder + ' ha sido completada'), TokensUsers, function(err, response) {
         if(err)throw err
     })
     }
