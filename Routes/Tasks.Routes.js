@@ -28,10 +28,14 @@ async function writeTokens(){
     const TokensGetting= await Tokens.find()
         TokensUsers = []
         TokensGetting.map((value)=>{
-            if(value.TokenDevice !== null){
+            if(value.TokenDevice === null){
+                return true
+            }
+            if(value.TokenDevice !== ''){
               TokensUsers.push(value.TokenDevice)
             }
-    })
+       });
+       
 }
 
 writeTokens()
@@ -292,9 +296,12 @@ app.put('/addToken',async(req,res)=>{
         const TokensGetting= await Tokens.find()
         TokensUsers = []
         TokensGetting.map((value)=>{
-           if(value.TokenDevice !== null){
-            TokensUsers.push(value.TokenDevice)
-           }
+            if(value.TokenDevice === null){
+                return true
+            }
+            if(value.TokenDevice !== ''){
+              TokensUsers.push(value.TokenDevice)
+            }
         })
         return res.json({status:200})
     } 
@@ -318,9 +325,12 @@ app.put('/deleteToken',async(req,res)=>{
     const TokensGetting= await Tokens.find()
         TokensUsers = []
         TokensGetting.map((value)=>{
-           if(value.TokenDevice !== null){
-            TokensUsers.push(value.TokenDevice)
-           }
+            if(value.TokenDevice === null){
+                return true
+            }
+            if(value.TokenDevice !== ''){
+              TokensUsers.push(value.TokenDevice)
+            }
         })
     res.json({status:200})
       
@@ -446,13 +456,13 @@ app.put('/getHistory',async(req, res)=>{
 })
 
 app.put('/stateChange',async(req,res)=>{
-    const {_id} = req.body
+    const {_id,DepartedDate} = req.body
     let resObj
     await Tasks.findByIdAndRemove(_id,(err,obj)=>{
         resObj = obj
     })
     const {payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId} = resObj
-    const history = new History({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
+    const history = new History({payer,numOrder,concept,uds,process,createDate,finishDate,DepartedDate,observations,createdId})
     await history.save()
     res.json({status:38}) // pass satatus task to history
 })
