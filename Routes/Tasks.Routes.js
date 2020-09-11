@@ -311,7 +311,6 @@ app.put('/addToken',async(req,res)=>{
 })
 
 app.put('/deleteToken',async(req,res)=>{
-    
     const {TokenId} = req.body
     var resObj
     await Tokens.findOneAndDelete({TokenDevice:TokenId},(err,obj)=>{
@@ -480,6 +479,32 @@ app.put('/deleteTaskHistory',async(req,res)=>{
     }
     res.json({status:37}) // obj delete 
 })
+
+app.put('/readNotificationUser',async(req,res)=>{
+    const {_id} = req.body
+    var sizeRead = 0
+    await User.findById(_id,(err,obj)=>{
+        if(err) throw err
+       //console.log(obj.nRead);
+       if(obj.nRead !== undefined){
+           sizeRead = parseInt(obj.nRead)
+       }
+    });
+
+    res.json({sizeUser:sizeRead})
+})
+
+app.put('/writeNotificationUser',async(req,res)=>{
+    const {_id,nRead} = req.body
+    await User.findByIdAndUpdate(_id,{nRead:nRead})
+    //console.log('update')
+    res.json({status:158})
+})
+
+app.put('/lenNotifications',async(req,res)=>{
+    const data = (await Notifications.find()).length
+    res.json({size:data})
+});
 
 app.put('/NotificationsRead',async(req,res)=>{
     

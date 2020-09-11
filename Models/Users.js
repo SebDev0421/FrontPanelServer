@@ -11,7 +11,8 @@ const mongoose = require('mongoose'),
           phone:"String",
           idEmployed:"String",
           auth:"String",
-          tokenId : "String"
+          tokenId : "String",
+          nRead : "String"
       },{
           collection:"users"
       }),
