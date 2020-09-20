@@ -364,11 +364,17 @@ app.put('/deleteData',async(req,res)=>{
 app.put('/addNewTask',async(req,res)=>{
     const {payer,numOrder,concept,uds,process,finishDate,observations,createdId,createDate} = req.body
     let resObj
+    let resObjHistory
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
     })
 
-    if (resObj === null){
+
+    await History.findOne({numOrder:numOrder},(err,obj)=>{
+        resObjHistory = obj
+    })
+
+    if (resObj === null && resObjHistory === null){
         const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
         await tasks.save()
         FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
