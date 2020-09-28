@@ -71,7 +71,7 @@ app.put('/register',async(req,res)=>{
         let mailOptions = {
             from: 'frontpanelappmanager@gmail.com',
             to: 'newappordercontrol@gmail.com',
-            subject: name+' esta pidiendo autorizacion para acceder a front panel app',
+            subject: name+' esta pidiendo autorizacion con el correo '+ email +' para acceder a front panel app',
             text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://'+URIServer+':8080/accessFrontpanelApp/'+obj._id
         }
         transporter.sendMail(mailOptions,function(err,data){
@@ -109,7 +109,7 @@ app.put('/getAuth',async(req,res)=>{
     let mailOptions = {
         from: 'frontpanelappmanager@gmail.com',
         to: 'newappordercontrol@gmail.com',
-        subject: name+' esta pidiendo autorizacion para acceder a front panel app',
+        subject: name+' esta pidiendo autorizacion con el correo '+ email +' para acceder a front panel app',
         text: name+' '+lastName+' Esta pidiendo a autorizacion, se la puedes conceder en este link'+'\nhttp://'+URIServer+':8080/accessFrontpanelApp/'+resObj._id
     }
     transporter.sendMail(mailOptions,function(err,data){
@@ -364,11 +364,13 @@ app.put('/addNewTask',async(req,res)=>{
     let resObjHistory
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
+        console.log('Task ',resObj)
     })
 
 
     await History.findOne({numOrder:numOrder},(err,obj)=>{
         resObjHistory = obj
+        console.log('Task History',resObjHistory)
     })
 
     if (resObj === null && resObjHistory === null){
