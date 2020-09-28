@@ -41,9 +41,6 @@ async function writeTokens(){
 writeTokens()
 
 
-
-
-
 app.get('/',(req,res)=>{
     res.json({response:'frontpanelapp'})
 })
