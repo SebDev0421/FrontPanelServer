@@ -364,14 +364,17 @@ app.put('/addNewTask',async(req,res)=>{
     let resObjHistory
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
-        console.log('Task ',resObj)
+        
     })
 
 
     await History.findOne({numOrder:numOrder},(err,obj)=>{
         resObjHistory = obj
-        console.log('Task History',resObjHistory)
+        
     })
+
+    console.log('Task ',resObj)
+    console.log('Task History',resObjHistory)
 
     if (resObj === null){
         if(resObjHistory === null){
