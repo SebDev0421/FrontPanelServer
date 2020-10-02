@@ -360,19 +360,22 @@ app.put('/deleteData',async(req,res)=>{
 
 app.put('/addNewTask',async(req,res)=>{
     const {payer,numOrder,concept,uds,process,finishDate,observations,createdId,createDate} = req.body
-    let resObj
-    let resObjHistory
+    var resObj
+    var resObjHistory
     let statusDelay = 0
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
+        console.log('Task ',resObj)
+
     })
 
     await History.findOne({numOrder:numOrder},(errH,objH)=>{
         resObjHistory = objH
+        console.log('Task History',resObjHistory)
     })
 
-    await console.log('Task ',resObj)
-    await console.log('Task History',resObjHistory)
+    console.log('Task ',resObj)
+    console.log('Task History',resObjHistory)
 
     if(statusDelay){
         const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
