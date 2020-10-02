@@ -372,25 +372,25 @@ app.put('/addNewTask',async(req,res)=>{
         resObj = obj
         console.log('Task Read',resObj)
     })
+    
+    while(resObjHistory === undefined){
+        await History.findOne({numOrder:numOrder},(errH,objH)=>{
+            resObjHistory = objH
+            console.log('Task History Read',resObjHistory)
+        })
+    }
 
-    await History.findOne({numOrder:numOrder},(errH,objH)=>{
-        resObjHistory = objH
-        console.log('Task History Read',resObjHistory)
-    })
-
-    setTimeout(()=>{
-        console.log('Task ',resObj)
-        console.log('Task History',resObjHistory)   
-        if(resObj === null && resObjHistory === null){
+    console.log('Task ',resObj)
+    console.log('Task History',resObjHistory)   
+    if(resObj === null && resObjHistory === null){
             const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
             await tasks.save()
             FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
                 if(err) throw err
             })
             return res.json({status:78}) //  task was saved
-        } 
-        res.json({status:79}) //task already exist
-    },200) 
+    } 
+    res.json({status:79}) //task already exist
 
     
 })
