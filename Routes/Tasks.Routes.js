@@ -377,7 +377,7 @@ app.put('/addNewTask',async(req,res)=>{
     console.log('Task History',resObjHistory)
 
     if (resObj === null){
-        if(resObjHistory === null){
+        if(resObjHistory === null || resObjHistory === undefined){
             const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
             await tasks.save()
             FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
@@ -392,7 +392,6 @@ app.put('/addNewTask',async(req,res)=>{
         return res.json({status:79}) //task already exist
     }
 
-    return res.json({status:79})
     
 
     
