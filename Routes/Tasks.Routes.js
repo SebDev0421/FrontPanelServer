@@ -373,16 +373,17 @@ app.put('/addNewTask',async(req,res)=>{
         console.log('Task Read',resObj)
     })
     
-    while(resObjHistory === undefined){
+    /* while(resObjHistory === undefined){
         await History.findOne({numOrder:numOrder},(errH,objH)=>{
             resObjHistory = objH
             console.log('Task History Read',resObjHistory)
         })
-    }
+    } */
 
-    console.log('Task ',resObj)
+    /* console.log('Task ',resObj)
     console.log('Task History',resObjHistory)   
-    if(resObj === null && resObjHistory === null){
+     */
+    if(resObj === null){
             const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
             await tasks.save()
             FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
