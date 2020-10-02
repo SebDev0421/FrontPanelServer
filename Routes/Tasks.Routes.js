@@ -365,14 +365,14 @@ app.put('/addNewTask',async(req,res)=>{
     let statusDelay = 0
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
-        await History.findOne({numOrder:numOrder},(errH,objH)=>{
-            resObjHistory = objH
-        })
-        
     })
 
-    console.log('Task ',resObj)
-    console.log('Task History',resObjHistory)
+    await History.findOne({numOrder:numOrder},(errH,objH)=>{
+        resObjHistory = objH
+    })
+
+    await console.log('Task ',resObj)
+    await console.log('Task History',resObjHistory)
 
     if(statusDelay){
         const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
