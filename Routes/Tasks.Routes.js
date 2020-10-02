@@ -378,14 +378,12 @@ app.put('/addNewTask',async(req,res)=>{
         console.log('Task History Read',resObjHistory)
     })
 
-    while(resObjHistory === undefined){
-        if(resObjHistory !== undefined){
-            break;
-        }
-    }    
+    setInterval(()=>{
+        console.log('Task ',resObj)
+        console.log('Task History',resObjHistory)    
+    },200) 
 
-    console.log('Task ',resObj)
-    console.log('Task History',resObjHistory)
+    
 
     if(statusDelay){
         const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
