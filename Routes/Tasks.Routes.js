@@ -378,7 +378,7 @@ app.put('/addNewTask',async(req,res)=>{
         console.log('Task History Read',resObjHistory)
     })
 
-    setInterval(()=>{
+    setTimeout(()=>{
         console.log('Task ',resObj)
         console.log('Task History',resObjHistory)    
     },200) 
