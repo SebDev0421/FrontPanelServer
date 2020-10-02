@@ -358,22 +358,31 @@ app.put('/deleteData',async(req,res)=>{
     res.json({status:50}); //user Delete data
 })
 
+
+
+
 app.put('/addNewTask',async(req,res)=>{
     const {payer,numOrder,concept,uds,process,finishDate,observations,createdId,createDate} = req.body
     var resObj
     var resObjHistory
     let statusDelay = 0
+
+
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
         console.log('Task Read',resObj)
-        await History.findOne({numOrder:numOrder},(errH,objH)=>{
-            resObjHistory = objH
-            console.log('Task History Read',resObjHistory)
-        })
-
     })
 
-    
+    await History.findOne({numOrder:numOrder},(errH,objH)=>{
+        resObjHistory = objH
+        console.log('Task History Read',resObjHistory)
+    })
+
+    while(resObjHistory === undefined){
+        if(resObjHistory !== undefined){
+            break;
+        }
+    }    
 
     console.log('Task ',resObj)
     console.log('Task History',resObjHistory)
