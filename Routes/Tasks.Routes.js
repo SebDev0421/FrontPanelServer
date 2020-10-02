@@ -365,23 +365,9 @@ app.put('/addNewTask',async(req,res)=>{
     let statusDelay = 0
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
-        
-    })
-
-
-    await History.findOne({numOrder:numOrder},(err,obj)=>{
-        resObjHistory = obj
-
-        if (resObj === null){
-            if(resObjHistory === null){
-                statusDelay = 1
-            }else{
-                statusDelay = 0
-            }
-        }else{
-            statusDelay = 0
-        }
-
+        await History.findOne({numOrder:numOrder},(errH,objH)=>{
+            resObjHistory = objH
+        })
         
     })
 
@@ -397,10 +383,9 @@ app.put('/addNewTask',async(req,res)=>{
         return res.json({status:78}) //  task was saved
     }
 
+    
 
     return res.json({status:79}) //task already exist
-        
-    
 })
 
 app.put('/readTasks', async(req,res)=>{
