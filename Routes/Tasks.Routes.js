@@ -381,7 +381,7 @@ app.put('/devNewTasks',async(req,res)=>{
         resObj = obj
     })
     if (resObj !== null){
-        return({status:75})
+        return res.json({status:75})
     }
     res.json({status:73}) //task don't exist
 })
@@ -393,7 +393,7 @@ app.put('/devNewHistory',async(req,res)=>{
         resObj = obj
     })
     if (resObj !== null){
-        return({status:75})
+        return res.json({status:75})
     }
     res.json({status:73}) //task don't exist
 })
