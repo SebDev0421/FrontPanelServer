@@ -374,7 +374,7 @@ app.put('/addNewTask',async(req,res)=>{
 
 })
 
-app.put('/readTaskStatus',async(res,req)=>{
+app.put('/Tasking',async(res,req)=>{
     
     /* await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
