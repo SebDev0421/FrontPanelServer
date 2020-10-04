@@ -374,32 +374,16 @@ app.put('/addNewTask',async(req,res)=>{
 
 })
 
-app.put('/Tasking',async(res,req)=>{
-    
-    /* await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
-        resObj = obj
-        console.log(log)
-    })
-
-    if(resObj === null){
-       return res.json({status:36})
-    } */
-
-    res.json({status:56})
-})
-
-app.put('/readHistoryStatus',async(res,req)=>{
+app.put('/devNewTasks',async(req,res)=>{
     const {numOrder} = req.body
     let resObj
-    await History.findOne({numOrder:numOrder},(err,obj)=>{
+    await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
     })
-
-    if(resObj === null){
-       return res.json({status:36})
+    if (resObj !== null){
+        return({status:75})
     }
-
-    res.json({status:56})
+    res.json({status:73}) //task don't exist
 })
 
 
