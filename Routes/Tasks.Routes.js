@@ -386,6 +386,17 @@ app.put('/devNewTasks',async(req,res)=>{
     res.json({status:73}) //task don't exist
 })
 
+app.put('/devNewHistory',async(req,res)=>{
+    const {numOrder} = req.body
+    let resObj
+    await History.findOne({numOrder:numOrder},(err,obj)=>{
+        resObj = obj
+    })
+    if (resObj !== null){
+        return({status:75})
+    }
+    res.json({status:73}) //task don't exist
+})
 
 
 app.put('/readTasks', async(req,res)=>{
