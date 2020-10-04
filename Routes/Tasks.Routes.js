@@ -363,38 +363,47 @@ app.put('/deleteData',async(req,res)=>{
 
 app.put('/addNewTask',async(req,res)=>{
     const {payer,numOrder,concept,uds,process,finishDate,observations,createdId,createDate} = req.body
-    var resObj
-    var resObjHistory
-    let statusDelay = 0
 
 
+    const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
+    await tasks.save()
+    FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
+     if(err) throw err
+    })
+    return res.json({status:78}) //  task was saved
+
+})
+
+app.put('consultTaskStatus',async(res,req)=>{
+    const {numOrder} = req.body
+    let resObj
     await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
-        console.log('Task Read',resObj)
     })
-    
-    /* while(resObjHistory === undefined){
-        await History.findOne({numOrder:numOrder},(errH,objH)=>{
-            resObjHistory = objH
-            console.log('Task History Read',resObjHistory)
-        })
-    } */
 
-    /* console.log('Task ',resObj)
-    console.log('Task History',resObjHistory)   
-     */
     if(resObj === null){
-            const tasks = new Tasks({payer,numOrder,concept,uds,process,createDate,finishDate,observations,createdId})
-            await tasks.save()
-            FCM.sendToMultipleToken(message('Orden Creada','La orden ' + numOrder + ' ha sido creada'), TokensUsers, function(err, response) {
-                if(err) throw err
-            })
-            return res.json({status:78}) //  task was saved
-    } 
-    res.json({status:79}) //task already exist
+       return res.json({status:36})
+    }
 
-    
+    res.json({status:56})
 })
+
+app.put('consultHistory',async(res,req)=>{
+    const {numOrder} = req.body
+    let resObj
+    await History.findOne({numOrder:numOrder},(err,obj)=>{
+        resObj = obj
+    })
+
+    if(resObj === null){
+       return res.json({status:36})
+    }
+
+    res.json({status:56})
+
+})
+
+
 
 app.put('/readTasks', async(req,res)=>{
     res.json(await Tasks.find())
