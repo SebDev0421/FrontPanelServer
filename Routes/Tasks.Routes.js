@@ -374,7 +374,7 @@ app.put('/addNewTask',async(req,res)=>{
 
 })
 
-app.put('consultTaskStatus',async(res,req)=>{
+app.put('/consultTaskStatus',async(res,req)=>{
     const {numOrder} = req.body
     let resObj
     console.log('Recibido: ',numOrder)
@@ -390,7 +390,7 @@ app.put('consultTaskStatus',async(res,req)=>{
     res.json({status:56})
 })
 
-app.put('consultHistory',async(res,req)=>{
+app.put('/consultHistory',async(res,req)=>{
     const {numOrder} = req.body
     let resObj
     await History.findOne({numOrder:numOrder},(err,obj)=>{
