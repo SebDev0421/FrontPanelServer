@@ -378,14 +378,14 @@ app.put('/consultTaskStatus',async(res,req)=>{
     const {numOrder} = req.body
     let resObj
     console.log('Recibido: ',numOrder)
-    await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
+    /* await Tasks.findOne({numOrder:numOrder},(err,obj)=>{
         resObj = obj
         console.log(log)
     })
 
     if(resObj === null){
        return res.json({status:36})
-    }
+    } */
 
     res.json({status:56})
 })
